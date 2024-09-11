@@ -1,8 +1,6 @@
 services:
   db:
-    container_name: db
-    image: mariadb:10.11
-    restart: unless-stopped
+    image: mariadb:11.4
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     healthcheck:
@@ -31,7 +29,6 @@ services:
     image: bitnami/phpmyadmin:5
     environment:
       - DATABASE_HOST=db
-      - PHPMYADMIN_ABSOLUTE_URI=/pma
     networks:
       - public
       - internal
@@ -53,7 +50,6 @@ services:
 
   traefik:
     image: traefik:v2.11
-    container_name: "traefik"
     configs:
       - source: traefik-yml
         target: /etc/traefik/traefik.yml
@@ -90,6 +86,10 @@ services:
 
 volumes:
   mariadb-data:
+    
+configs:
+  traefik-yml:
+    file: traefik/traefik.yml
 
 networks:
   internal:
