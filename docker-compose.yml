@@ -4,9 +4,7 @@ services:
     image: mariadb:10.11
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mariadb-root-password
-    secrets:
-      - mariadb-root-password
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     healthcheck:
       test:
         [
@@ -45,7 +43,7 @@ services:
         - "traefik.http.routers.db-admin.entrypoints=https"
         - "traefik.http.routers.db-admin.tls.certresolver=le"
         - "traefik.http.routers.db-admin.middlewares=db-admin-auth"
-        - "traefik.http.middlewares.db-admin-auth.basicauth.users=xxx"
+        - "traefik.http.middlewares.db-admin-auth.basicauth.users=${DB_ADMIN_AUTH}"
         - "traefik.http.services.db-admin.loadbalancer.server.port=8080"
       resources:
         limits:
@@ -78,7 +76,7 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=public"
-        - "traefik.http.middlewares.dashboard-auth.basicauth.users=xxx"
+        - "traefik.http.middlewares.dashboard-auth.basicauth.users=${DASHBOARD_AUTH}"
         - "traefik.http.routers.dashboard.rule=Host(`gate.carqr.link`)"
         - "traefik.http.routers.dashboard.entrypoints=https"
         - "traefik.http.routers.dashboard.tls.certresolver=le"
@@ -92,10 +90,6 @@ services:
 
 volumes:
   mariadb-data:
-   
-secrets:
-  mariadb-root-password:
-    external: true
 
 networks:
   internal:
