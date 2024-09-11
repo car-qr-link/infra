@@ -44,7 +44,7 @@ services:
         - "traefik.http.services.db-admin.loadbalancer.server.port=8080"
       resources:
         limits:
-          memory: 128M
+          memory: 256M
         reservations:
           memory: 64M
 
