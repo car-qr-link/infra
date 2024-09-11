@@ -94,6 +94,8 @@ configs:
 
 networks:
   internal:
+    name: internal
     driver: overlay
   public:
+    name: public
     driver: overlay
